@@ -1,4 +1,4 @@
-MODULE = my_kset
+MODULE = knk-yi
 obj-m += ${MODULE}.o
 KDIR := /lib/modules/$(shell uname -r)/build
 all:
