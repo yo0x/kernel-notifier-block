@@ -24,7 +24,6 @@ static int keys_pressed(struct notifier_block *, unsigned long, void *); // Call
 static struct file_operations fops = {
 	.read = dev_read
 };
-lkasjdlkasjdklsadlkas
 // Initializing the notifier_block
 static struct notifier_block nb = {
 	.notifier_call = keys_pressed
