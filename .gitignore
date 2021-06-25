@@ -1,0 +1,7 @@
+#Build files not neccesary on sc
+.knk*
+*.ko
+*.o
+*.mod*
+Module*
+modules*
