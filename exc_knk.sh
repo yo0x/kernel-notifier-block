@@ -8,13 +8,15 @@ DEVICE='keylog5'
 #build the module
 echo "cleaning"
 make clean
+rm -f keylog*
+rmmod "$FILE_TO_BUILD"
 echo "Builind"
 make -f "$FILE_TO_BUILD".c
 #load module & create inode
 insmod "$FILE_TO_BUILD".ko
 #GET MAJOR MINOR
-MAJOR=ls -ln keylog5 | cut -d ' ' -f 5 | sed -r 's/[,]+/ /g'
-mknod "$DEVICE" c $MAJOR 0
+MAJOR=$(ls -ln keylog5 \| cut -d \' \' -f 5 \| sed -r \'s/[,]+/ /g\')
+mknod "$DEVICE" c "$MAJOR" 0
 
 
 #run python on background
