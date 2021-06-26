@@ -11,7 +11,7 @@ from os.path import exists
 from os import uname
 import getpass
 import pastebin
-import datetime;
+import datetime
 from time import sleep
 import json  
 
