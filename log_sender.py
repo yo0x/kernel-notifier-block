@@ -93,7 +93,7 @@ def main():
         else:
             print(" USE: python log_sender.py -f <file_name> -t <time to upload>")
     try:
-        fill_buffer_upload(file_inode,time_to_upload)
+        fill_buffer_upload(file_inode,int(time_to_upload))
         
     except Exception as e:
         print(e)
