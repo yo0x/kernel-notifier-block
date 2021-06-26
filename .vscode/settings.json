@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "kernel.h": "c"
-    }
+    },
+    "python.pythonPath": "/home/yix/miniconda3/envs/ad_os_env/bin/python"
 }
