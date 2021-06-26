@@ -8,5 +8,5 @@ modules*
 mmm.c
 .env
 ref_pastebin/
-.vscode/
+*.vscode/
 __pycache__/
