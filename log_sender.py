@@ -64,7 +64,7 @@ def fill_buffer_upload(myInode, uploadInterval):
         print("DEBUGGING SIZE: {} \n".format(sys.getsizeof(bufferToUp)))
         if(sys.getsizeof(bufferToUp)>700):
             data = json.dumps(bufferToUp)
-            result = api.paste(data, guest=True, name="Logs for: {}".format(getpass.getuser()), format='json', private='1', expire='10M')
+            result = api.paste(data, guest=True, name="Logs for: {}".format(getpass.getuser()), format='json', private='1', expire='1H')
             sleep(2)
             print(result)
             if 'Bad API request' not in result:
