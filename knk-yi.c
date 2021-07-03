@@ -10,7 +10,7 @@
 
 #define DEVICE_NAME "key_log"  // the name of this device
 
-/*global veriabls*/
+/*global variables*/
 int major_num=0;
 int minor_num=0;
 
