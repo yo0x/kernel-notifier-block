@@ -9,4 +9,4 @@ mmm.c
 .env
 ref_pastebin/
 *.vscode/
-__pycache__/
+__pycache__
