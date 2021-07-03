@@ -45,13 +45,9 @@ static int keys_pressed(struct notifier_block *, unsigned long, void *); // Call
 struct file_operations fops = {
 	.owner = THIS_MODULE,
 	.read = dev_read
-<<<<<<< HEAD
-};
-=======
 	};
 
 
->>>>>>> ilona
 // Initializing the notifier_block
 static struct notifier_block nb = {
 	.notifier_call = keys_pressed
