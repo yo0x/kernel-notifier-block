@@ -1,6 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect
 import sys
 import os
+import time
+from xml.etree import ElementTree
 current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
@@ -12,21 +14,35 @@ import xmltodict
 app = Flask(__name__)
 
 def latestLogs():
+    
    try:
         api = get_pastebin_api()
-        print(api)
+        print("API ".format(api))
    except Exception as e:
+        print("DEBB NONO \n")
         print(e)
-#    print(thisRes['paste']['paste_key'])
    #Get all pastes
-   thisRes = xmltodict.parse(api.list_pastes())
-   print(thisRes)
-   logsIn = []
-   for paste in thisRes:
-       logsIn.append(json.loads(api.raw_pastes(paste['paste']['paste_key'])))
-       
-   return logsIn
-#    return(api.raw_pastes())
+   try:
+       print(api.list_pastes())
+       raw_pastes = []
+       new_dic = {}
+       thisRes = api.list_pastes()
+       xml = ElementTree.fromstring('<list>' + thisRes + '</list>')
+       result = xml.findall(".//paste/paste_key")
+       for i in result:
+           raw_pastes.append(json.loads(api.raw_pastes(i.text)))
+           time.sleep(1)
+           print(i.text)
+       for a in raw_pastes:
+           print(a)
+       for soloPaste in raw_pastes:
+           for new_k in soloPaste:
+               new_dic[new_k] = soloPaste[new_k]
+               
+               
+   except Exception as e:
+       print(e)
+   return(new_dic)
    
         
     
@@ -34,6 +50,9 @@ def latestLogs():
 
 @app.route('/')
 def hello():
-    
-    logs = latestLogs()
-    return render_template('logs.html', logs = logs)
+    dic_json = latestLogs()
+    for key in dic_json:
+        print(key)
+        print(dic_json[key])
+    #return "Hello{}".format(logs)
+    return render_template('logs.html', logs =dic_json )
