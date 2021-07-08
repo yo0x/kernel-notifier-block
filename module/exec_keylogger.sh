@@ -39,7 +39,7 @@ export FLASK_ENV=development
 export FLASK_APP=../FE/main.py
 flask run &
 sleep 5s
-xdg-open https://localhost:5000
+firefox https://localhost:5000
 
 
 
