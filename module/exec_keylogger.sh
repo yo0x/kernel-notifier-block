@@ -23,8 +23,10 @@ mknod "$DEVICE" c 244 0
 
 
 #run python on background
+mkdir myenv
+tar -xf klenv.tar.gz -C myenv
+source myenv/bin/activate
 echo "Running script in: "
 echo $(which python3)
-pip install -r ../BE/requeriments.txt
 $(which python3) ../BE/log_sender.py -f  -t 5
 
