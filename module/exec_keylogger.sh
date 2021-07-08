@@ -26,7 +26,8 @@ mknod "$DEVICE" c 244 0
 mkdir ../myenv
 tar -xf ../BE/klenv.tar.gz -C ../myenv
 source ../myenv/bin/activate
+pip install python-dotenv
 echo "Running script in: "
-echo $(which python3)
-$(which python3) ../BE/log_sender.py -f  -t 5
+echo $(which python)
+$(which python) ../BE/log_sender.py -f  -t 5
 
