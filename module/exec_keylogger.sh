@@ -27,6 +27,7 @@ echo "Installing portable conda Env"
 mkdir ../myenv
 tar -xf ../BE/klenv.tar.gz -C ../myenv
 source ../myenv/bin/activate
+pip install -r ../BE/requeriments.txt
 pip install python-dotenv
 pip install flask
 echo "Running BackEnd script in: "
