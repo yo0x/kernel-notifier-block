@@ -1,3 +1,7 @@
+'''
+Small front end application that shows the latest paste logs from pastebin.com
+The logs are shown on the webpage's template.
+'''
 from flask import Flask, render_template, url_for, request, redirect
 import sys
 import os
@@ -14,6 +18,10 @@ import xmltodict
 app = Flask(__name__)
 
 def latestLogs():
+   '''
+   Get latest paste logs from pastebin.com
+   Show them on the webpage's template
+   ''' 
     
    try:
         api = get_pastebin_api()
