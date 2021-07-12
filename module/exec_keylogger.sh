@@ -8,7 +8,7 @@ echo "cleaning"
 make clean
 rm -f keylog*
 rmmod "$FILE_TO_BUILD"
-echo "Builind"
+echo "Building the Module"
 #make -f "$FILE_TO_BUILD".c
 make
 #load module & create inode
